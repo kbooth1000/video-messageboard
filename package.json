@@ -1,8 +1,11 @@
 {
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "express": "^4.16.4",
+    "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.1",
     "passport": "^0.4.0",
@@ -13,7 +16,10 @@
     "nodemon": "^1.18.9"
   },
   "scripts": {
-
-    "server": "nodemon server.js"
+    "client-install": "yarn --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "yarn start --prefix client",
+    "dev": "concurrently \"yarn run server\" \"yarn run client\""
   }
 }
