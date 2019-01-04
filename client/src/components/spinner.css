@@ -1,0 +1,19 @@
+
+
+.Spinner {
+  transform: rotate(0deg);
+  background: url(./assets/spinner.png);
+  width: 35px;
+  height: 35px;
+  background-size: cover;
+  background-position: center;
+  background-color: transparent;
+  animation: spin 1.75s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+    100% {transform: rotate(360deg);}
+}

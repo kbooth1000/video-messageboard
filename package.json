@@ -16,10 +16,10 @@
     "nodemon": "^1.18.9"
   },
   "scripts": {
-    "client-install": "yarn --prefix client",
-    "start": "node server.js",
+    "client-install": "yarn --cwd client",
+    "start": "node server",
     "server": "nodemon server.js",
-    "client": "yarn start --prefix client",
-    "dev": "concurrently \"yarn run server\" \"yarn run client\""
+    "client": "yarn --cwd client start ",
+    "dev": "concurrently \"yarn server\" \"yarn client\""
   }
 }
