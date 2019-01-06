@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
 import Header from './Header';
+import Landing from './Landing';
 import ThreadsList from './ThreadsList';
 import NewThreadButton from './NewThreadButton';
+import Register from './auth/Register';
+import Login from './auth/Login';
 import Footer from './Footer';
-import Spinner from './Spinner';
 
 import pic from './assets/pic.jpg';
 import './main.css';
@@ -17,10 +19,11 @@ class Main extends Component {
         <Header />
         
         <main className="main-content">
-          <Route path="/" component={ThreadsList} />
-          <Spinner />
+          <Route path="/" exact component={Landing} />
+          <Route path="/threads" exact component={ThreadsList} />
+          <Route path="/register" exact component={Register} /> 
+          <Route path="/login" exact component={Login} /> 
         </main>
-
         <NewThreadButton />
         <Footer />
       </div>
