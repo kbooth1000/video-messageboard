@@ -1,0 +1,12 @@
+.Post {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 4px 4px 4px 14px;
+    border-bottom: #ddd 5px solid;
+}
+
+.video-box {
+    background: #eee;
+    margin: 4px 4px 4px 0;
+}

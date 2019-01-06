@@ -1,9 +1,15 @@
 import React from 'react';
 
+import Thread from './Thread';
+import './threadslist.css';
+
 const ThreadsList = () => {
   return (
     <div className="ThreadsList">
-      THREADSLIST
+      <Thread />
+      <Thread />
+      <Thread />
+      <Thread />
     </div>
   )
 }
