@@ -1,6 +1,6 @@
-
-
-.Spinner {
+  .Spinner {
+  position: absolute;
+  z-index: 11;
   transform: rotate(0deg);
   background: url(./assets/spinner.png);
   width: 35px;
@@ -12,8 +12,7 @@
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-    100% {transform: rotate(360deg);}
+  0% { transform: rotate(0deg) scale(1);  }
+  60% {transform: rotate(180deg) scale(.8);}
+  100% { transform: rotate(360deg) scale(1);  }
 }
