@@ -9,7 +9,6 @@ import Register from './auth/Register';
 import Login from './auth/Login';
 import Footer from './Footer';
 
-import pic from './assets/pic.jpg';
 import './main.css';
 
 class Main extends Component {

@@ -1,5 +1,4 @@
 import React from 'react';
-import spinner from './assets/loader-spinner.png';
 
 import './spinner.css';
 

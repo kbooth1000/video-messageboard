@@ -7,16 +7,14 @@ class Login extends Component {
             email: '',
             password: ''
         }
-        this.onSubmitHandler=this.onSubmitHandler.bind(this);
-        this.onChangeHandler=this.onChangeHandler.bind(this);
     }
 
-    onChangeHandler(e){
+    onChangeHandler = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
-    onSubmitHandler(e){
+    onSubmitHandler = (e) => {
         e.preventDefault();
         const userLogin = {
             email: this.state.email,

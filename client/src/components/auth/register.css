@@ -1,0 +1,7 @@
+.Register .error {
+  border-color: #f00;
+}
+
+.Register input {
+  margin: 4px 3px 6px;
+}

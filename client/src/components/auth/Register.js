@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+
+import './register.css';
 
 class Register extends Component {
     constructor(){
@@ -10,13 +13,11 @@ class Register extends Component {
             password2: '',
             errors: {}
         }
-        this.onChangeHandler = this.onChangeHandler.bind(this);
-        this.onSubmitHandler = this.onSubmitHandler.bind(this);
     }
-    onChangeHandler(e){
+    onChangeHandler = (e) =>   {
         this.setState({ [e.target.name] : e.target.value});
     }
-    onSubmitHandler(e){
+    onSubmitHandler = (e) => {
         e.preventDefault();
         const newUser = {
             name: this.state.name,
@@ -24,19 +25,40 @@ class Register extends Component {
             password: this.state.password,
             password2: this.state.password2
         }
-        console.log(newUser);
+        axios.post('/api/auth/register', newUser)
+        .then(
+            user => console.log('user: ', user.data)
+        )
+        .catch( err => {
+            this.setState({errors: err.response.data});
+            let errors = [];
+            for(err in this.state.errors){
+                errors.push(this.state.errors[err])
+            }
+            console.log('errors: ', errors);
+            
+        })
     }
     render(){
+        const {errors} = this.state;
         return (
             <div className="Register">
                 <h1>Register</h1>
 
                 <form onSubmit={this.onSubmitHandler}>
-                    <input type="text" value={this.state.name} placeholder="Name" name="name" onChange={this.onChangeHandler} className="form-name" /><br/>
-                    <input type="text" value={this.state.email} placeholder="Email" name="email" onChange={this.onChangeHandler} className="form-email" /><br/>
-                    <input type="text" value={this.state.password} placeholder="Password" name="password" onChange={this.onChangeHandler} className="form-password" /><br/>
-                    <input type="text" value={this.state.password2} placeholder="Confirm Password" name="password2" onChange={this.onChangeHandler} className="form-password2" />
-                    <br/><input type="submit" />
+                    <input type="text" value={this.state.name} placeholder="Name" className={`form-input ${errors.name && 'error'}`} name="name" onChange={this.onChangeHandler} />
+                    {errors.name && (<span>{errors.name}</span>)}<br/>
+
+                    <input type="text" value={this.state.email} placeholder="Email" name="email" onChange={this.onChangeHandler} className={`form-input ${errors.email && 'error'}`} />
+                    {errors.email && (<span>{errors.email}</span>)}<br/>
+
+                    <input type="text" value={this.state.password} placeholder="Password" name="password" onChange={this.onChangeHandler} className={`form-input ${errors.password && 'error'}`} />
+                    {errors.password && (<span>{errors.password}</span>)}<br/>
+
+                    <input type="text" value={this.state.password2} placeholder="Confirm Password" name="password2" onChange={this.onChangeHandler} className={`form-input ${errors.password2 && 'error'}`} />
+                    {errors.password2 && (<span>{errors.password2}</span>)}<br/>
+
+                    <input type="submit" />
                 </form>
             </div>
         )
