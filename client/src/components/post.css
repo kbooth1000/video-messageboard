@@ -3,7 +3,7 @@
     flex-direction: row;
     padding: 4px 4px 4px 14px;
     border-bottom: #ddd 5px solid;
-    justify-content: start;
+    justify-content: flex-start;
 }
 
 .video-box {
