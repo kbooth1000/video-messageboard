@@ -1,4 +1,3 @@
-// import { REGISTER_USER } from '../actions/authActions';
 import { GET_CURRENT_USER } from '../actions/authActions';
 
 const initialState = {
