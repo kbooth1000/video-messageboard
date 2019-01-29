@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import { getCurrentUser } from '../../actions/authActions';
 
 class Login extends Component {
     constructor(){
@@ -20,6 +22,7 @@ class Login extends Component {
             email: this.state.email,
             password: this.state.password
         }
+        this.props.getCurrentUser(userLogin);
         console.log(userLogin);
     }
     render(){
@@ -36,4 +39,8 @@ class Login extends Component {
     }
 }
 
-export default Login;
+let mapStateToProps = state=>( {
+    auth: state.auth, errors: state.errors
+})
+
+export default connect(mapStateToProps,{getCurrentUser})( Login);
