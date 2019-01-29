@@ -43,6 +43,7 @@ class Register extends Component {
         return (
             <div className="Register">
                 <h1>Register</h1>
+                
 
                 <form onSubmit={this.onSubmitHandler}>
                     <input type="text" value={this.state.name} placeholder="Name" className={`form-input ${errors.name && 'error'}`} name="name" onChange={this.onChangeHandler} />
