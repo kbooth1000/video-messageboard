@@ -6,7 +6,10 @@ export const GET_CURRENT_USER = 'GET_CURRENT_USER';
 
 export const registerUser = (userData, history) => dispatch => {
   axios.post('/api/auth/register', userData)
-  .then( user =>{ dispatch({type: REGISTER_USER, payload: user.data}); history.push('/login')})
+  .then( user =>{ 
+    dispatch({type: REGISTER_USER, payload: user.data}); 
+    history.push('/login')
+})
   .catch( err => {
     dispatch({type: GET_ERRORS, payload: err.response.data})
   })

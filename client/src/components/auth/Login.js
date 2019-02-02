@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import { getCurrentUser } from '../../actions/authActions';
 
 class Login extends Component {
@@ -29,6 +30,7 @@ class Login extends Component {
         return (
             <div className="Login">
                 <h1>Login</h1>
+
                 <form onSubmit={this.onSubmitHandler}>
                     <input value={this.state.email} type="text" onChange={this.onChangeHandler} name="email" placeholder="Email" />
                     <br/><input value={this.state.password} type="text" onChange={this.onChangeHandler} name="password" placeholder="Password" />
@@ -43,4 +45,4 @@ let mapStateToProps = state=>( {
     auth: state.auth, errors: state.errors
 })
 
-export default connect(mapStateToProps,{getCurrentUser})( Login);
+export default connect(mapStateToProps,{getCurrentUser})(withRouter( Login));
