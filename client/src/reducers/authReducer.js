@@ -1,4 +1,5 @@
 import { GET_CURRENT_USER, REGISTER_USER } from '../actions/authActions';
+import isEmpty from '../validation/is-empty';
 
 const initialState = {
   isAuthenticated: false,
@@ -16,7 +17,8 @@ const authReducer = (state=initialState, action) => {
     case GET_CURRENT_USER:
       return {
         ...state, 
-         currentUser: action.payload
+         currentUser: action.payload,
+         isAuthenticated: !isEmpty(action.payload)
       }
     default: return state;
   }
