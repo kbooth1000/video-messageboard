@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './newthreadbutton.css'
+import './assets/styles/newthreadbutton.css'
 
 const NewThreadButton = () => {
   return (

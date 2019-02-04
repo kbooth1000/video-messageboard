@@ -9,7 +9,7 @@ import Register from './auth/Register';
 import Login from './auth/Login';
 import Footer from './Footer';
 
-import './main.css';
+import './assets/styles/main.css';
 
 class Main extends Component {
   render() {

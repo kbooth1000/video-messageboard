@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import Spinner from './Spinner';
-import './post.css';
+import './assets/styles/post.css';
 
 class Post extends Component {
     

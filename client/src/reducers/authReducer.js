@@ -1,9 +1,8 @@
-import { GET_CURRENT_USER, REGISTER_USER } from '../actions/authActions';
+import { REGISTER_USER, SET_CURRENT_USER } from '../actions/authActions';
 import isEmpty from '../validation/is-empty';
 
 const initialState = {
   isAuthenticated: false,
-  user: {},
   currentUser: {}
 }
 
@@ -14,7 +13,7 @@ const authReducer = (state=initialState, action) => {
         ...state, user: action.payload
       }
       //
-    case GET_CURRENT_USER:
+    case SET_CURRENT_USER:
       return {
         ...state, 
          currentUser: action.payload,

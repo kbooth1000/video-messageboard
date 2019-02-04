@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import { getPosts } from '../actions/postsActions';
 
 import Post from './Post';
-import './thread.css';
+import './assets/styles/thread.css';
 
 class Thread extends Component{
     constructor(props){

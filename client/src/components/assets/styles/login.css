@@ -1,0 +1,7 @@
+.Login .error {
+  border-color: #f00;
+}
+
+.Login input {
+  margin: 4px 3px 6px;
+}
