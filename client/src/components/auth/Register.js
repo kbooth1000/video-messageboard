@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import {registerUser } from '../../actions/authActions';
 
-import './register.css';
+import '../assets/styles/register.css';
 
 class Register extends Component {
     constructor(){

@@ -13,7 +13,7 @@ const User = require('../../models/User');
 
 module.exports = router;
 
-// POST api/users/register
+// POST api/auth/register
 
 router.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -56,7 +56,7 @@ router.post('/register', (req, res) => {
   });
 });
 
-// POST api/users/login
+// POST api/auth/login
 
 router.post('/login', (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
@@ -98,7 +98,7 @@ router.post('/login', (req, res) => {
   });
 });
 
-// GET api/users/current
+// GET api/auth/current
 
 router.get('/current', passport.authenticate('jwt', { session : false}), (req, res) => {
   let { name, email, id } = req.user;
