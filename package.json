@@ -9,9 +9,11 @@
     "helmet": "^3.15.0",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.1",
+    "multer": "^1.4.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "validator": "^10.10.0"
+    "validator": "^10.10.0",
+    "videojs-record": "^3.4.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.9"

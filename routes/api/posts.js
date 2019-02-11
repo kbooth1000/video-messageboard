@@ -2,10 +2,15 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
+const multer = require('multer');
 
 const Post = require('../../models/Post');
 const User = require('../../models/User');
 const validatePostInput = require('../../validation/post');
+
+const upload = multer({
+  dest: 'client/public/uploads/'
+}); 
 
 // GET /api/posts/test
 router.get('/test', (req, res) => res.send({ msg: 'Posts works.' }));
@@ -59,7 +64,8 @@ router.delete(
 // POST api/posts
 router.post(
   '/',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }), 
+  upload.single('video'),
   (req, res) => {
     console.log('validatePostInput: ', validatePostInput(req.body));
     const { errors, isValid } = validatePostInput(req.body);
@@ -72,7 +78,9 @@ router.post(
       text: req.body.text,
       name: req.body.name,
       avatar: req.body.avatar,
-      user: req.body.id
+      user: req.body.id,
+      thumbnailUrl: req.body.thumbnailUrl,
+      videoUrl: req.body.videoUrl
     });
     console.log('newPost: ', newPost);
 

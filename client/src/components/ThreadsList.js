@@ -21,7 +21,7 @@ class ThreadsList extends Component {
     const {posts} = this.props.posts;
     console.log('posts', this.props.posts);
     let postsList = posts.map(post=>(
-      <PostThumbBox key={post.id} posts={posts} />
+      <PostThumbBox key={post.id} post={post} />
     ))
     
     return (
