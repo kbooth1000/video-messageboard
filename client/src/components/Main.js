@@ -8,7 +8,7 @@ import NewThreadButton from './NewThreadButton';
 import Register from './auth/Register';
 import Login from './auth/Login';
 import Footer from './Footer';
-import VideoRecorder from './VideoRecorder';
+import VideoRecorder from './DualScreenRecorder'; 
 
 import './assets/styles/main.css';
 
@@ -17,7 +17,7 @@ class Main extends Component {
     return (
       <div className="Main">
         <Header />
-        <VideoRecorder />VideoRecorder
+        <VideoRecorder  />VideoRecorder
         <main className="main-content">
           <Route path="/" exact component={Landing} />
           <Route path="/threads" exact component={ThreadsList} />
