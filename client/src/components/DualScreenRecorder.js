@@ -6,30 +6,37 @@ class VideoRecorder extends Component {
     super();
     this.videoRecordingRef = React.createRef();
     this.videoRecordedRef = React.createRef();
+    this.mediaRecorder = null;
+    this.mediaSource = new MediaSource();
+    this.sourceBuffer = null;
     this.state = {
       errorMsg: '',
       recordBtnText: 'Start Recording',
       recordBtnDisabled: true,
       playBtnDisabled: true,
-      downloadBtnDisabled: true
+      downloadBtnDisabled: true,
+      recordedBlobs: []
     }
   }
 
 
   handleSourceOpen = (event) => {
     console.log('MediaSource opened');
-    sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
-    console.log('Source buffer: ', sourceBuffer);
+    this.sourceBuffer = this.mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
+    console.log('Source buffer: ', this.sourceBuffer);
   }
   
   handleDataAvailable = (event) => {
     if (event.data && event.data.size > 0) {
-      recordedBlobs.push(event.data);
+      this.setState({
+        recordedBlobs: [...this.state.recordedBlobs, event.data]
+      })
+      // recordedBlobs.push(event.data);
     }
   }
   
   startRecording = () => {
-    recordedBlobs = [];
+    // recordedBlobs = [];
     let options = {mimeType: 'video/webm;codecs=vp9'};
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
       console.error(`${options.mimeType} is not Supported`);
@@ -39,21 +46,22 @@ class VideoRecorder extends Component {
       options = {mimeType: 'video/webm;codecs=vp8'};
       if (!MediaRecorder.isTypeSupported(options.mimeType)) {
         console.error(`${options.mimeType} is not Supported`);
-                errorMsg: `${options.mimeType} is not Supported`
-      });
+        this.setState({errorMsg: `${options.mimeType} is not Supported`})
+      };
         options = {mimeType: 'video/webm'};
         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
           console.error(`${options.mimeType} is not Supported`);
           this.setState({
-            errorMsg: `${options.mimeType} is not Supported`;
-          options = {mimeType: ''}
+            errorMsg: `${options.mimeType} is not Supported`
           });
+          options = {mimeType: ''}
+          
         }
       }
-    }
+    
   
-    try {
-      mediaRecorder = new MediaRecorder(window.stream, options);
+      try {
+      this.mediaRecorder = new MediaRecorder(window.stream, options);
     } catch (e) {
       console.error('Exception while creating MediaRecorder:', e);
       this.setState({
@@ -61,8 +69,8 @@ class VideoRecorder extends Component {
       });
       return;
     }
-  
-    console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+    
+    console.log('Created MediaRecorder', this.mediaRecorder, 'with options', options);
     this.setState({
       recordBtnText: 'Stop Recording'
     });
@@ -72,27 +80,27 @@ class VideoRecorder extends Component {
     this.setState({
       downloadBtnDisabled: true
     });
-    mediaRecorder.onstop = (event) => {
+    this.mediaRecorder.onstop = (event) => {
       console.log('Recorder stopped: ', event);
     };
-    mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.start(10); // collect 10ms of data
-    console.log('MediaRecorder started', mediaRecorder);
+    this.mediaRecorder.ondataavailable = this.handleDataAvailable;
+    this.mediaRecorder.start(10); // collect 10ms of data
+    console.log('MediaRecorder started', this.mediaRecorder);
   }
   
   stopRecording = () => {
-    mediaRecorder.stop();
-    console.log('Recorded Blobs: ', recordedBlobs);
+    this.mediaRecorder.stop();
+    console.log('Recorded Blobs: ', this.state.recordedBlobs);
   }
   
   handleSuccess = (stream) => {
     this.setState({
-      recordBtnDisable: false
+      recordBtnDisabled: false
     });    console.log('getUserMedia() got stream:', stream);
     window.stream = stream;
   
-    const gumVideo = document.querySelector('video#gum');
-    gumVideo.srcObject = stream;
+    // const gumVideo = document.querySelector('video#gum');
+    this.videoRecordingRef.current.srcObject = stream;
   }
   
    init = async (constraints) => {
@@ -106,94 +114,82 @@ class VideoRecorder extends Component {
       });
     }
   }
-  render() {
 
-    const mediaSource = new MediaSource();
-    mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
-    let mediaRecorder;
-    let recordedBlobs;
-    let sourceBuffer;
+  recordClickHandler = () => {
+    if (this.state.recordBtnText === 'Start Recording') {
+      this.startRecording();
+    } else {
+      this.stopRecording();
+      this.setState({
+        recordBtnText: 'Start Recording'
+      });
+      this.setState({
+        playBtnDisabled: false
+      });
+      this.setState({
+        downloadBtnDisabled: false
+      });    }
+  };
+  
+  // const playButton = document.querySelector('button#play');
+  playClickHandler = () => {
+    const superBuffer = new Blob(this.state.recordedBlobs, {type: 'video/webm'});
+    this.videoRecordedRef.current.src = null;
+    this.videoRecordedRef.current.srcObject = null;
+    this.videoRecordedRef.current.src = window.URL.createObjectURL(superBuffer);
+    this.videoRecordedRef.current.controls = true;
+    this.videoRecordedRef.current.play();
+  };
+  
+  downloadClickHandler = () => {
+    const blob = new Blob(this.state.recordedBlobs, {type: 'video/webm'});
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'test.webm';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+  };
+  
+  startClickHandler = async () => {
+    console.log('START');
     
-    // const errorMsgElement = document.querySelector('span#errorMsg');
-    const recordedVideo = document.querySelector('video#recorded');
-    recordButton.addEventListener('click', () => {
-      if (recordButton.textContent === 'Start Recording') {
-        this.startRecording();
-      } else {
-        this.stopRecording();
-        this.setState({
-          recordBtnText: 'Start Recording'
-        });
-        playButton.disabled = false;
-        downloadButton.disabled = false;
+    // const hasEchoCancellation = document.querySelector('#echoCancellation').checked; //use in audio constraints (exact: hasEchoCancellation)
+    const constraints = {
+      audio: {
+        echoCancellation: {exact: true}
+      },
+      video: {
+        width: 640, height: 360
       }
-    });
-    
-    const playButton = document.querySelector('button#play');
-    playButton.addEventListener('click', () => {
-      const superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
-      recordedVideo.src = null;
-      recordedVideo.srcObject = null;
-      recordedVideo.src = window.URL.createObjectURL(superBuffer);
-      recordedVideo.controls = true;
-      recordedVideo.play();
-    });
-    
-    const downloadButton = document.querySelector('button#download');
-    downloadButton.addEventListener('click', () => {
-      const blob = new Blob(recordedBlobs, {type: 'video/webm'});
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = 'test.webm';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => {
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      }, 100);
-    });
-    
-    
-    
-    document.querySelector('button#start').addEventListener('click', async () => {
-      const hasEchoCancellation = document.querySelector('#echoCancellation').checked;
-      const constraints = {
-        audio: {
-          echoCancellation: {exact: hasEchoCancellation}
-        },
-        video: {
-          width: 1280, height: 720
-        }
-      };
-      console.log('Using media constraints:', constraints);
-      await init(constraints);
-    });
-      
-    
-    
+    };
+    console.log('Using media constraints:', constraints);
+    await this.init(constraints);
+  };
 
+componentDidMount = () => {
+  this.mediaSource.addEventListener('sourceopen', this.handleSourceOpen, false);
+}
+
+  render() {
+    
     return (
 
-
-
       <div id="container">
-        <video ref={this.videoRecordingRef} id="gum" playsinline autoplay muted></video>
-        <video ref={this.videoRecordedRef} id="recorded" playsinline loop></video>
+        <video ref={this.videoRecordingRef} id="gum" playsInline autoPlay muted></video>
+        <video ref={this.videoRecordedRef} id="recorded" playsInline loop></video>
     
         <div>
-            <button id="start">Start camera</button>
-            <button id="record" disabled>{this.state.recordBtnText}</button>
-            <button id="play" disabled={this.state.playBtnDisabled}>Play</button>
-            <button id="download" disabled={this.state.downloadBtnDisabled}>Download</button>
+            <button id="start" onClick={this.startClickHandler}>Start camera</button>
+            <button id="record" disabled={this.state.recordBtnDisabled} onClick={this.recordClickHandler}>{this.state.recordBtnText}</button>
+            <button id="play" disabled={this.state.playBtnDisabled} onClick={this.playClickHandler}>Play</button>
+            <button id="download" disabled={this.state.downloadBtnDisabled} onClick={this.downloadClickHandler}>Download</button>
         </div>
-    
-        <div>
-            <h4>Media Stream Constraints options</h4>
-            <p>Echo cancellation: <input type="checkbox" id="echoCancellation" /></p>
-        </div>
-    
         <div>
             <span id="errorMsg">{this.state.errorMsg}</span>
         </div>
