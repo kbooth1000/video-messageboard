@@ -85,9 +85,9 @@ router.post(
 
 
 // UPLOAD VIDEO
-const upload = multer({
-  dest: 'client/public/uploads/'
-});
+// const upload = multer({
+//   dest: 'client/public/uploads/'
+// });
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, '../../client/public/uploads/');
@@ -100,7 +100,7 @@ const storage = multer.diskStorage({
 
 const uploadVid = multer({ storage });
 
-router.post('/upload', upload.array('myFiles', 12), (req, res, next) => {
+router.post('/upload', uploadVid.array('myFiles', 12), (req, res, next) => {
   const files = req.files
   if (!files) {
     const error = new Error('Please choose files')
