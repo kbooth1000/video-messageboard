@@ -8,12 +8,8 @@ const Post = require('../../models/Post');
 const User = require('../../models/User');
 const validatePostInput = require('../../validation/post');
 
-const upload = multer({
-  dest: 'client/public/uploads/'
-}); 
-
 // GET /api/posts/test
-router.get('/test', (req, res) => res.send({ msg: 'Posts works.' }));
+router.get('/test', (req, res) => res.send({ msg: 'Posts test.' }));
 
 // GET /api/posts
 router.get('/', (req, res) => {
@@ -64,8 +60,7 @@ router.delete(
 // POST api/posts
 router.post(
   '/',
-  passport.authenticate('jwt', { session: false }), 
-  upload.single('video'),
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
     console.log('validatePostInput: ', validatePostInput(req.body));
     const { errors, isValid } = validatePostInput(req.body);
@@ -88,6 +83,35 @@ router.post(
   }
 );
 
+
+// UPLOAD VIDEO
+// const upload = multer({
+//   dest: 'client/public/uploads/'
+// });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '../../client/public/uploads/');
+  },
+  filename: (req, file, cb) => {
+    const newFilename = `videoFileUploaded`;
+    cb(null, newFilename);
+  }
+});
+
+const uploadVid = multer({ storage });
+
+router.post('/upload', uploadVid.array('myFiles', 12), (req, res, next) => {
+  const files = req.files
+  if (!files) {
+    const error = new Error('Please choose files')
+    error.httpStatusCode = 400
+    return next(error)
+  }
+ 
+    res.send(files)
+  
+})
+
 // POST api/posts/like/:id
 router.post(
   '/like/:id',
@@ -108,11 +132,9 @@ router.post(
           post.save().then(post => res.json(post));
         })
         .catch(err =>
-          res
-            .status(404)
-            .json({
-              postnotfound: `No post with the id ${req.params.id} exists.`
-            })
+          res.status(404).json({
+            postnotfound: `No post with the id ${req.params.id} exists.`
+          })
         );
     });
   }
@@ -141,11 +163,9 @@ router.post(
           post.save().then(post => res.json(post));
         })
         .catch(err =>
-          res
-            .status(404)
-            .json({
-              postnotfound: `No post with the id ${req.params.id} exists.`
-            })
+          res.status(404).json({
+            postnotfound: `No post with the id ${req.params.id} exists.`
+          })
         );
     });
   }
